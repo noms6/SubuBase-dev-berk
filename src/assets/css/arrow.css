@@ -1,0 +1,69 @@
+.splide__arrow {
+    width: 40px; /* Ok genişliği */
+    height: 40px; /* Ok yüksekliği */
+    background-color: #ccc; /* Ok rengi */
+    opacity: 0.7; /* Ok opaklığı */
+    border-radius: 50%; /* Okun kenar yuvarlaklığı */
+    border: none; /* Kenarlık yok */
+    cursor: pointer; /* İmleç türü: el */
+    position: absolute; /* Mutlak konum */
+    top: 50%; /* Üst kenarın yüzde 50'sinde hizalama */
+    transform: translateY(-50%); /* Dikey hizalama */
+    transition: background-color 0.3s ease; /* Renk geçişi */
+}
+.splide__arrow:hover {
+    background-color: #fff; /* Üzerine gelindiğinde arka plan rengi */
+  }
+
+  .arrow-icon {
+    font-size: 20px; /* Ok simgesi font büyüklüğü */
+    line-height: 40px; /* Dikey hizalama */
+  }
+ 
+  .slider-container .main-label {
+    color: #FFF;
+    font-size: 37px;
+    line-height: 62px;
+    font-weight: 800;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+  }
+  .bottom-label {
+    top: 280px; /* or adjust as needed */
+    left: 140px; /* or adjust as needed */
+    transform: translateY(20px);
+  }
+  .splide__slide img {
+    width: 100%;
+    height: auto;
+  }
+  .splide__slide {
+    position: relative;
+  }
+  .caption {
+    position: absolute;
+    color: #000000;
+    opacity: 0;
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  }
+  
+  .main-label {
+    top: 210px; /* or adjust as needed */
+    left: 135px; /* or adjust as needed */
+    transform: translateY(-20px);
+  }
+  .animated {
+    opacity: 1;
+  }
+  
+  .animated.main-label {
+    transform: translateX(0);
+    transition: opacity 0.5s ease-out 0.3s, transform 0.5s ease-out 0.3s;
+  }
+  
+  .animated.bottom-label {
+    transform: translateX(0);
+    transition: opacity 0.5s ease-out 0.5s, transform 0.5s ease-out 0.5s;
+  }
+  
+
+  

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Basic -->
+    <title>Sakarya Uygulamalı Bilimler Üniversitesi Eğitim Bilgi Sistemi</title>
+    <meta name="description" content="EğitimÖğretimBilgiSistemi">
+    <meta name="author" content="Sakarya Uygulamalı Bilimler Üniversitesi">
+
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Web Fonts  -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800%7CShadows+Into+Light" rel="stylesheet" type="text/css">
+
+    <link rel="shortcut icon" href="https://www.subu.edu.tr/sites/subu.edu.tr/files/favicon.ico" />
+    <!-- Vendor CSS -->
+    <link rel="stylesheet" href="/vendor/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="/vendor/fontawesome/css/font-awesome.css">
+    <link rel="stylesheet" href="/vendor/owlcarousel/owl.carousel.css" media="screen">
+    <link rel="stylesheet" href="/vendor/owlcarousel/owl.theme.css" media="screen">
+    <link rel="stylesheet" href="/vendor/magnific-popup/magnific-popup.css" media="screen">
+
+</head>
+<body>
+    <div class="body">
+
+        <div role="main" class="main">
+
+            <div id="vue_ustmenu">
+                <header id="header">
+                    <div class="container">
+                        <h1 class="logo">
+                            <a href="/"><img id="ustLogo" alt="Porto" width="261" height="78" data-sticky-width="209" data-sticky-height="62" src="/SubuBase/dist/img/logoUzun.svg"></a>
+                        </h1>
+                        <nav>
+                        <ul class="nav nav-pills nav-top">
+                            <li><a href="https://www.subu.edu.tr/tr/iletisim-bilgileri" data-langkey="KurumHakkinda"><i class="fa fa-angle-right"></i>Kurum Hakkında</a></li>
+                            <li><a href="https://kesfet.subu.edu.tr/" data-langkey="OgrencilerIcinBilgi"><i class="fa fa-angle-right"></i>Öğrenciler İçin Bilgi</a></li>
+        
+                            <li style="top: 8px;">
+                                <select id="akademikYilSelect" class="input-group">
+                                    <option v-for="(item, index) in AkademikYilListesi" v-bind:value="item.id" :selected="item.id == AktifAkademikYilId">{{item.ad}}</option>
+                                </select>
+                            </li>
+                            <li style="top: 7px; left: 15px;">
+                                <select id="dilSelect" name="input-group">
+                                <option value="2001">T&#xFC;rk&#xE7;e</option>
+        <option value="2002">&#x130;ngilizce</option>
+        </select>
+                            </li>
+                        </ul>
+                    </nav>
+
+
+
+
+
+
+
+
+
+
+                    </div>
+                </header>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
