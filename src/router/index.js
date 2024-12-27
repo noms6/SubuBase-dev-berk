@@ -67,9 +67,30 @@ const router = new VueRouter({
       name: 'etkinlik',
       component: () => import('@/views/EtkinlikView.vue'),
       meta: {
-        layout: 'full',
+        pageTitle: 'etkinlik',
+        breadcrumb: [
+          {
+            text: 'etkinlik',
+            active: true,
+          },
+        ],
       },
     },
+    {
+      path: '/contact',
+      name: 'contact',
+      component: () => import('@/components/Contact.vue'),
+      meta: {
+        pageTitle: 'İletişim',
+        breadcrumb: [
+          {
+            text: 'İletişim',
+            active: true,
+          },
+        ],
+      },
+    },
+   
     {
       path: '*',
       redirect: 'error-404',

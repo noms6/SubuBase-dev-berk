@@ -1,10 +1,22 @@
 <template>
-    <div id="app">
-        <EventDisplay v-if="!isEditing" :eventName="event.name" :eventDate="event.date"
-            :participationStatus="event.status" :requirements="event.requirements" @edit-event="toggleEditMode"
-            @complete-event="markEventAsComplete" />
-        <EventEdit v-else :eventName="event.name" :eventDate="event.date" :participationLimit="event.limit"
-            :requirements="event.requirements" @save-event="updateEvent" />
+    <div id="event-view" class="full-screen">
+        <EventDisplay 
+            v-if="!isEditing" 
+            :eventName="event.name" 
+            :eventDate="event.date"
+            :participationStatus="event.status" 
+            :requirements="event.requirements" 
+            @edit-event="toggleEditMode"
+            @complete-event="markEventAsComplete" 
+        />
+        <EventEdit 
+            v-else 
+            :eventName="event.name" 
+            :eventDate="event.date" 
+            :participationLimit="event.limit"
+            :requirements="event.requirements" 
+            @save-event="updateEvent" 
+        />
     </div>
 </template>
 
@@ -13,6 +25,7 @@ import EventDisplay from "../components/President/EventDisplay.vue";
 import EventEdit from "../components/President/EventEdit.vue";
 
 export default {
+    name: "EventView",
     components: {
         EventDisplay,
         EventEdit,
@@ -28,7 +41,7 @@ export default {
                 requirements: [
                     "Yazılım geliştirme ile ilgili temel bilgi",
                     "İlgili programlama dilinde deneyim",
-                    "Etkinliğe aktif katılım",
+                    "Etkinliğe aktif katılım sağlamak için zaman ayırmak" 
                 ],
             },
         };
@@ -51,9 +64,6 @@ export default {
 };
 </script>
 
-<style>
-#app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    margin: 20px;
-}
+<style scoped>
+
 </style>

@@ -56,9 +56,4 @@ export default [
     route: 'topluluk-ekle',
     roles: []
   },
-  {
-    title: 'İletişim',
-    route: 'iletisim',
-    roles: []
-  }
 ];

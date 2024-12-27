@@ -1,6 +1,6 @@
 <template>
   <div>
-  <sosyal-medya/>
+  <Contact/>
   </div>
 </template>
 
@@ -10,7 +10,7 @@ import ToplulukBilgileri from '@/components/President/ToplulukBilgileri.vue';
 import Gerekli from '@/components/President/GerekiBelgeler.vue';
 import Notification from '@/components/President/Notification.vue';
 import Talep from '@/components/President/Talep.vue';
-import Contact from '@/components/President/Contact.vue';
+import Contact from '@/components/Contact.vue';
 import Charts from '@/components/Sks/Charts.vue';
 import NotificationSks from '@/components/Sks/notificationSks.vue';
 import EtkinlikSks from '@/components/Sks/etkinlikSks.vue';
