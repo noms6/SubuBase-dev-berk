@@ -1,19 +1,18 @@
 <template>
-    <div class="notification-container">
+    <div class="notification-container" @mouseleave="startCloseTimer" @mouseover="clearCloseTimer">
         <!-- Bildirim Simgesi -->
-        <feather-icon icon="BellIcon" size="21" class="text-primary" badge="4" @click="toggleRequest"
-            />
+        <feather-icon icon="BellIcon" size="21" class="text-primary" :badge="requests.length" @click="toggleRequest" />
 
-            <!-- Talepler Bölümü -->
-            <div v-if="isRequestOpen" class="request-dropdown">
-                <div class="request-item" v-for="(request, index) in requests" :key="index">
-                    <span class="status-badge">Düzenlendi</span>
-                    <!-- Tıklanabilir başlık -->
-                    <a href="#" @click.prevent="handleRequestClick(request)" class="request-title">
-                        {{ request.title }}
-                    </a>
-                </div>
+        <!-- Talepler Bölümü -->
+        <div v-if="isRequestOpen" class="request-dropdown">
+            <div @click.prevent="handleRequestClick(request)" class="request-item" v-for="(request, index) in requests"
+                :key="index">
+                <span class="status-badge">Düzenlendi</span>
+                <a href="#" @click.prevent="handleRequestClick(request)" class="request-title">
+                    {{ request.title }}
+                </a>
             </div>
+        </div>
     </div>
 </template>
 
@@ -27,14 +26,44 @@ export default {
                 { id: 2, title: "Talep Konusu 2" },
                 { id: 3, title: "Talep Konusu 3" },
             ],
+            closeTimer: null, // Kapanma zamanlayıcısı
         };
     },
     methods: {
         toggleRequest() {
             this.isRequestOpen = !this.isRequestOpen; // Taleplerin açılmasını/kapanmasını sağlar
+            if (!this.isRequestOpen) {
+                this.clearCloseTimer(); // Kapanmaya dair zamanlayıcıyı temizle
+            }
         },
-        handleRequestClick(request) {
-            alert(`Talep seçildi: ${request.title}`); // Talep başlığına tıklandığında işlem
+        handleRequestClick() {
+            this.$router.push('/NotificationFull'); // Talep başlığına tıklandığında işlem
+        },
+        startCloseTimer() {
+            if (this.isRequestOpen) {
+                this.closeTimer = setTimeout(() => {
+                    this.isRequestOpen = false; // 2 saniye sonra talepleri kapat
+                }, 1000);
+            }
+        },
+        clearCloseTimer() {
+            if (this.closeTimer) {
+                clearTimeout(this.closeTimer); // Zamanlayıcıyı temizle
+                this.closeTimer = null;
+            }
+        },
+        addRequest() {
+            // Yeni talep ekler
+            this.requests.push({
+                id: this.requests.length + 1,
+                title: `Talep Konusu ${this.requests.length + 1}`,
+            });
+        },
+        removeRequest() {
+            // Son talebi siler
+            if (this.requests.length > 0) {
+                this.requests.pop();
+            }
         },
     },
 };
@@ -44,12 +73,13 @@ export default {
 .notification-container {
     position: relative;
     display: inline-block;
+    cursor: pointer;
 }
 
 .request-dropdown {
     position: absolute;
     top: 30px;
-    left: 0;
+    right: 0;
     background-color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -78,7 +108,6 @@ export default {
 
 .status-badge {
     background-color: #28a745;
-    /* Yeşil arka plan */
     color: #fff;
     font-size: 0.8rem;
     padding: 4px 8px;
@@ -90,7 +119,6 @@ export default {
     margin: 0;
     font-size: 0.9rem;
     color: #007bff;
-    /* Tıklanabilir link rengi */
     text-decoration: none;
     cursor: pointer;
     transition: color 0.2s ease;
@@ -98,6 +126,5 @@ export default {
 
 .request-title:hover {
     color: #0056b3;
-    /* Hover sırasında koyu mavi */
 }
 </style>

@@ -32,7 +32,9 @@
           <span>Çıkış Yap</span>
         </b-dropdown-item>
       </b-nav-item-dropdown>
+      
     </b-navbar-nav>
+    <NotificationSks/>
   </div>
 </template>
 
@@ -41,6 +43,7 @@ import {BAvatar, BDropdownDivider, BDropdownItem, BLink, BNavbarNav, BNavItemDro
 import DarkToggler from '@core/layouts/components/app-navbar/components/DarkToggler.vue'
 import {mapGetters} from 'vuex'
 import subuAxios from "@/libs/subu-axios";
+import NotificationSks from '@/components/Sks/notificationSks.vue';
 
 export default {
   components: {
@@ -54,6 +57,7 @@ export default {
     BImg,
     // Navbar Components
     DarkToggler,
+    NotificationSks
   },
   props: {
     toggleVerticalMenuActive: {

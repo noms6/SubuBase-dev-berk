@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import EventDisplay from "../components/President/EventDisplay.vue";
-import EventEdit from "../components/President/EventEdit.vue";
+import EventDisplay from "@/components/Sks/EventDisplaySks.vue";
+import EventEdit from "@/components/Sks/EventEditSks.vue";
 
 export default {
     name: "EventView",

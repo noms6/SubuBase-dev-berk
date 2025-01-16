@@ -1,25 +1,13 @@
 <template>
     <div class="status-card">
-        <div class="status-item" v-for="(item, index) in approvedRequests" :key="'approved-' + index">
+        <div class="status-item" v-for="(item, index) in metrics" :key="'metric-' + index">
             <div class="status-icon" :style="{ color: item.color }">
                 <i :class="item.icon"></i>
             </div>
             <div class="status-text">
                 <p class="status-value" :style="{ color: item.color }">{{ item.value }}</p>
                 <p class="status-label">
-                    Onaylanan Talepler İçin <span>{{ item.label }}</span>
-                </p>
-            </div>
-        </div>
-
-        <div class="status-item" v-for="(item, index) in rejectedRequests" :key="'rejected-' + index">
-            <div class="status-icon" :style="{ color: item.color }">
-                <i :class="item.icon"></i>
-            </div>
-            <div class="status-text">
-                <p class="status-value" :style="{ color: item.color }">{{ item.value }}</p>
-                <p class="status-label">
-                    Reddedilen Talepler İçin <span>{{ item.label }}</span>
+                    <span>{{ item.label }}</span>
                 </p>
             </div>
         </div>
@@ -38,95 +26,85 @@
 import { saveAs } from "file-saver";
 import XLSX from "xlsx";
 import { Chart } from "chart.js";
-import { Line } from "vue-chartjs";
 
 export default {
     name: "CommunityEventStatus",
     data() {
         return {
-            approvedRequests: [
-                { value: 50, label: "Katılımcı Sayısı", icon: "fas fa-users", color: "#28a745" },
-                { value: 5, label: "Sponsor", icon: "fas fa-handshake", color: "#007bff" },
-                { value: 3, label: "Etkinlik Sayısı", icon: "fas fa-calendar-alt", color: "#ffc107" },
-            ],
-            rejectedRequests: [
-                { value: 2, label: "Katılımcı Sayısı", icon: "fas fa-users-slash", color: "#dc3545" },
-                { value: 1, label: "Sponsor", icon: "fas fa-ban", color: "#dc3545" },
+            metrics: [
+                { value: 10, label: "Toplam Yapılan Etkinlik", icon: "fas fa-calendar-check", color: "#28a745" },
+                { value: 15, label: "Toplam Topluluk", icon: "fas fa-users", color: "#007bff" },
+                { value: 50, label: "Toplam Onaylanan Talep", icon: "fas fa-thumbs-up", color: "#33CC00" },
+                { value: 5, label: "Toplam Reddedilen Talep", icon: "fas fa-thumbs-down", color: "#CC3333" },
+                { value: 200, label: "Toplam Topluluk Üye Sayısı", icon: "fas fa-user-friends", color: "#17a2b8" },
+                { value: 20, label: "Toplam Reddedilen Üye Sayısı", icon: "fas fa-user-slash", color: "#6c757d" },
             ],
         };
     },
-    computed: {
-        approvalRate() {
-            const total = this.approvedRequests.length + this.rejectedRequests.length;
-            return (this.approvedRequests.length / total) * 100;
-        },
-        rejectionRate() {
-            const total = this.approvedRequests.length + this.rejectedRequests.length;
-            return (this.rejectedRequests.length / total) * 100;
-        }
-    },
     methods: {
         downloadExcel() {
-            const approvedWorksheet = XLSX.utils.json_to_sheet(this.approvedRequests.map(item => ({
-                "Değer": item.value,
-                "Etiket": item.label,
-            })));
-            const rejectedWorksheet = XLSX.utils.json_to_sheet(this.rejectedRequests.map(item => ({
-                "Değer": item.value,
-                "Etiket": item.label,
-            })));
+            try {
+                const worksheet = XLSX.utils.json_to_sheet(
+                    this.metrics.map(item => ({
+                        "Değer": item.value,
+                        "Etiket": item.label,
+                    }))
+                );
 
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, approvedWorksheet, "Onaylanan Talepler");
-            XLSX.utils.book_append_sheet(workbook, rejectedWorksheet, "Reddedilen Talepler");
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, "Talepler ve Metrikler");
 
-            const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-            const data = new Blob([excelBuffer], { type: "application/octet-stream" });
-            saveAs(data, "etkinlik_talepleri.xlsx");
+                const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+                const data = new Blob([excelBuffer], { type: "application/octet-stream" });
+                saveAs(data, "talepler_ve_metrikler.xlsx");
+
+                alert("Excel dosyası başarıyla indirildi!");
+            } catch (error) {
+                console.error("Excel dosyası indirilemedi:", error);
+                alert("Bir hata oluştu. Lütfen tekrar deneyin.");
+            }
         },
         renderChart() {
-            const ctx = document.getElementById("statusChart").getContext("2d");
-            new Chart(ctx, {
-                type: "pie",
-                data: {
-                    labels: ["Onaylanan Talepler", "Reddedilen Talepler"],
-                    datasets: [{
-                        data: [this.approvedRequests.length, this.rejectedRequests.length],
-                        backgroundColor: ["#28a745", "#dc3545"],
-                        borderColor: ["#1e7e34", "#c82333"],
-                        borderWidth: 2,
-                    }],
+    const ctx = document.getElementById("statusChart").getContext("2d");
+    new Chart(ctx, {
+        type: "pie",
+        data: {
+            labels: this.metrics.slice(2, 4).map(item => item.label),
+            datasets: [
+                {
+                    data: this.metrics.slice(2, 4).map(item => item.value),
+                    backgroundColor: this.metrics.slice(2, 4).map(item => item.color),
+                    borderColor: this.metrics.slice(2, 4).map(item => item.color),
+                    borderWidth: 2,
                 },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: "top",
-                            labels: {
-                                font: {
-                                    size: 16,
-                                },
-                            },
+            ],
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: "top",
+                    labels: {
+                        font: {
+                            size: 16,
                         },
-                        tooltip: {
-                            callbacks: {
-                                label: function (tooltipItem) {
-                                    return tooltipItem.label + ": " + tooltipItem.raw + " talepler";
-                                },
-                            },
-                        },
-                    },
-                    elements: {
-                        arc: {
-                            borderWidth: 4,
-                        },
-                    },
-                    animation: {
-                        duration: 1500,
                     },
                 },
-            });
-        }
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            return tooltipItem.label + ": " + tooltipItem.raw;
+                        },
+                    },
+                },
+            },
+            animation: {
+                duration: 1500,
+            },
+        },
+    });
+},
+
     },
     mounted() {
         this.renderChart();
@@ -136,7 +114,7 @@ export default {
 
 <style scoped>
 .status-card {
-    max-width: 500px;
+    max-width: 600px;
     margin: auto;
     padding: 20px;
     border-radius: 10px;

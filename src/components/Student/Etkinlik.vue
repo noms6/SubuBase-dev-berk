@@ -4,6 +4,18 @@
       <h3 class="notification-title">Etkinlikler</h3>
       <div class="timeline-wrapper">
         <app-timeline>
+           <!-- Sayılı Etkinlik -->
+           <app-timeline-item variant="primary" @click="goToSpecialEvent">
+            <div class="timeline-header">
+              <h6>Sayılı Etkinlik</h6>
+              <small class="text-muted">Bugün, 14:00</small>
+            </div>
+            <p class="timeline-content">Sadece sınırlı kontenjanla katılabilirsiniz!</p>
+            <div class="document-preview">
+              <i class="fas fa-calendar-alt document-icon"></i>
+              <span>Sayılı Etkinlik Detayları</span>
+            </div>
+          </app-timeline-item>
           <!-- Ödeme Yapılan Fatura -->
           <app-timeline-item>
             <div class="timeline-header">
@@ -16,6 +28,7 @@
               <span>fatura.pdf</span>
             </div>
           </app-timeline-item>
+          
 
           <!-- Müşteri Toplantısı -->
           <app-timeline-item variant="secondary">
@@ -95,6 +108,11 @@ export default {
       financialReports: ["Rapor 1", "Rapor 2", "Rapor 3"],
     };
   },
+  methods: {
+    goToSpecialEvent() {
+      this.$router.push('/special-event');
+    },
+  },
 };
 </script>
 
@@ -102,9 +120,9 @@ export default {
 .notification-container {
   max-width: 800px;
   margin: 0 auto;
+  padding: 1.5rem;
   height: 100%;
   max-height: 90vh;
-  min-height: 100%;
 }
 
 .notification-box {

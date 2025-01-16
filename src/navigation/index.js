@@ -1,59 +1,80 @@
 export default [
   {
     title: 'Anasayfa',
-    route: 'home',
+    route: 'Anasayfa',
     icon: 'HomeIcon',
     roles: []
   },
   {
-    title: 'Second Page',
-    route: 'second-page',
-    icon: 'UserIcon',
+    title: 'Anasayfa',
+    route: 'AnasayfaSks',
+    icon: 'HomeIcon',
     roles: []
   },
   {
-    title: 'Nasıl Topluluk Oluşturulur?',
+    title: 'Anasayfa',
+    route: 'AnasayfaOgr',
+    icon: 'HomeIcon',
+    roles: []
+  },
+  {
+    title: 'Topluluk Oluştur?',
     route: 'topluluk-olustur',
     roles: []
   },
   {
     title: 'Gerekli Belgeler',
-    route: 'gerekli-belgeler',
+    route: 'GerekliBelgeler',
     roles: []
   },
   {
-    title: 'Topluluklar',
-    route: 'topluluklar',
+    title: 'Talep Et',
+    route: 'TalepEt',
     roles: []
   },
   {
-    title: 'Topluluğum',
-    route: 'toplulugum',
+    title: 'Üyelerimiz',
+    route: 'Member',
     roles: []
   },
   {
-    title: 'etkinlik',
+    title: 'Etkinlik',
     route: 'etkinlik',
     roles: []
   },
   {
-    title: 'Etkinlikler',
-    route: 'etkinlikler-Sks',
-    roles: []
-  },
-  {
-    title: 'Talepler',
-    route: 'talepler',
-    roles: []
-  },
-  {
-    title: 'Talepler',
-    route: 'talepler-Sks',
+    title: 'Etkinliklerimiz',
+    route: 'EtkinlikFull',
     roles: []
   },
   {
     title: 'Topluluk Ekle',
-    route: 'topluluk-ekle',
+    route: 'ToplulukEkle',
     roles: []
+  },
+  {
+    title: 'Talepler',
+    route: 'Talepler',
+    roles: []
+  },
+  {
+    title: 'Etkinlikler',
+    route: 'Etkinlikler',
+    roles: []
+  },
+  {
+    title: 'Talep',
+    route: 'Talep',
+    roles: []
+  },
+ /* {
+    title: 'Bildirimler',
+    route: 'NotificationFull',
+    roles: []
+  }, */
+  {
+    title: 'Topluluklarım',
+    route: 'Toplulugum2',
+    roles: [] 
   },
 ];

@@ -104,8 +104,6 @@ Vue.use(VueCompositionAPI)
 
 // Secret key ve base api url
 Vue.prototype.JWT_TOKEN_SECRET = '9290CDEA772E49A1AD970AD4C5CDADFD'
-axios.defaults.baseURL= 'https://ebsapi.bys.subu.edu.tr/'
-
 axios.defaults.headers.common.Authorization = `Bearer ${store.getters['subu/getToken'] ?? ''}`
 
 // import core styles

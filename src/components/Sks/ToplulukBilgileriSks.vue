@@ -8,6 +8,10 @@
                 </h3>
             </b-card-header>
             <b-card-body class="px-4">
+                <div class="logo-box text-center">
+                    <img src="http://sks.subu.edu.tr/sites/sks.subu.edu.tr/files/gbb-uploads/geleceğin mühendisleri-jyi2m9.jpg"
+                        alt="Logo" class="img-fluid" />
+                </div>
                 <b-list-group flush>
                     <b-list-group-item class="d-flex align-items-center">
                         <i class="fas fa-user-tie mr-3 text-info"></i>
@@ -64,7 +68,7 @@ export default {
     data() {
         return {
             community: {
-                name: "Topluluk Adı",
+                name: "Teknoloji ve inovasyon topluluğu",
                 advisor: "Prof. Dr. Ahmet Yılmaz",
                 president: "Mehmet Kaya",
                 description: "Teknoloji ve inovasyon odaklı öğrenci topluluğu",
@@ -81,6 +85,18 @@ export default {
 </script>
 
 <style scoped>
+.logo-box {
+    margin-top: 20px;
+    /* Üst boşlukları azaltarak daha uygun hale getirdik */
+    text-align: center;
+}
+
+.logo-box img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100px;
+}
+
 .community-info {
     height: 100%;
     padding: 1rem;

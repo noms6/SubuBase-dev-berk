@@ -1,7 +1,7 @@
 <template>
     <div class="notification-container">
         <h2 class="notification-title">Bildirim Ekranı</h2>
-        <div v-for="(item, index) in requests" :key="index" class="notification-item" :class="item.statusClass">
+        <div @click="NotificationFull" v-for="(item, index) in requests" :key="index" class="notification-item" :class="item.statusClass">
             <div class="notification-header">
                 <span class="notification-title">{{ item.title }}</span>
                 <button class="edit-button">Düzenle</button>
@@ -14,25 +14,13 @@
 
 <script>
 export default {
-    name: 'NotificationList',
-    data() {
-        return {
-            requests: [
-                {
-                    title: 'Talep Konusu 1',
-                    status: 'Onaylandı',
-                    reason: 'Evraklar eksiksiz ve uygun.',
-                    statusClass: 'approved',
-                },
-                {
-                    title: 'Talep Konusu 2',
-                    status: 'Reddedildi',
-                    reason: 'Belgeler eksik veya yanlış.',
-                    statusClass: 'rejected',
-                },
-            ],
-        };
-    },
+
+    methods:{
+        NotificationFull() {
+            this.$router.push('/NotificationFull');
+        },
+    }
+
 };
 </script>
 
@@ -43,6 +31,7 @@ export default {
     border: 1px solid #0066cc;
     border-radius: 5px;
     background-color: #f9f9f9;
+    cursor: pointer;
 }
 
 .notification-title {
