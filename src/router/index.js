@@ -162,14 +162,14 @@ const router = new VueRouter({
       },
     },
     {
-      path: '/NotificationFull',
-      name: 'NotificationFull',
+      path: '/Taleplerim',
+      name: 'Taleplerim',
       component: () => import('@/views/President/NotificationFull.vue'),
       meta: {
-        pageTitle: 'Bildirimler',
+        pageTitle: 'Taleplerim',
         breadcrumb: [
           {
-            text: 'Bildirimler',
+            text: 'Taleplerim',
             active: true,
           },
         ],

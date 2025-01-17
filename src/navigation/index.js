@@ -1,30 +1,8 @@
 export default [
   {
-    title: 'Anasayfa',
+    title: 'Anasayfa-Başkan',
     route: 'Anasayfa',
     icon: 'HomeIcon',
-    roles: []
-  },
-  {
-    title: 'Anasayfa',
-    route: 'AnasayfaSks',
-    icon: 'HomeIcon',
-    roles: []
-  },
-  {
-    title: 'Anasayfa',
-    route: 'AnasayfaOgr',
-    icon: 'HomeIcon',
-    roles: []
-  },
-  {
-    title: 'Topluluk Oluştur?',
-    route: 'topluluk-olustur',
-    roles: []
-  },
-  {
-    title: 'Gerekli Belgeler',
-    route: 'GerekliBelgeler',
     roles: []
   },
   {
@@ -33,18 +11,30 @@ export default [
     roles: []
   },
   {
+    title: 'Taleplerim',
+    route: 'Taleplerim',
+    roles: [] 
+  },
+  
+  {
     title: 'Üyelerimiz',
     route: 'Member',
     roles: []
   },
   {
-    title: 'Etkinlik',
-    route: 'etkinlik',
+    title: 'Etkinliklerimiz',
+    route: 'EtkinlikFull',
     roles: []
   },
   {
-    title: 'Etkinliklerimiz',
-    route: 'EtkinlikFull',
+    title: 'Gerekli Belgeler',
+    route: 'GerekliBelgeler',
+    roles: []
+  },
+  {
+    title: 'Anasayfa-Sks',
+    route: 'AnasayfaSks',
+    icon: 'HomeIcon',
     roles: []
   },
   {
@@ -63,8 +53,14 @@ export default [
     roles: []
   },
   {
-    title: 'Talep',
-    route: 'Talep',
+    title: 'Anasayfa-Öğrenci',
+    route: 'AnasayfaOgr',
+    icon: 'HomeIcon',
+    roles: []
+  },
+  {
+    title: 'Topluluk Oluştur?',
+    route: 'topluluk-olustur',
     roles: []
   },
  /* {
@@ -77,4 +73,5 @@ export default [
     route: 'Toplulugum2',
     roles: [] 
   },
+  
 ];

@@ -1,24 +1,56 @@
 <template>
-    <div class="events-container">
-        <div v-for="item in items" :key="item.id" class="event-item">
-            <div class="event-header" @click="toggleAccordion(item.id)">
-                <div class="event-info">
-                    <span class="event-title">{{ item.title }}</span>
-                    <span class="event-date">{{ item.date }}</span>
-                </div>
-                <!-- Sayılı Etkinlik Butonu -->
-                <div v-if="item.isLimited" class="limited-event-button">
-                    <button class="small-button" @click="goToEventPage(item.link)">Sayılı Etkinlik</button>
+    <div class="container">
+        <div class="header">Etkinlikler</div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="perPageSelect">Sayfa Başına</label>
+                <b-form-select id="perPageSelect" v-model="perPage" size="sm" :options="pageOptions" />
+            </div>
+
+            <div class="control-group">
+                <label for="sortBySelect">Sırala</label>
+                <div class="inline-group">
+                    <b-form-select id="sortBySelect" v-model="sortBy" :options="sortOptions">
+                        <template v-slot:first>
+                            <option value="">-- Seçim Yok --</option>
+                        </template>
+                    </b-form-select>
+                    <b-form-select v-model="sortDesc" size="sm" :disabled="!sortBy">
+                        <option :value="false">Artan</option>
+                        <option :value="true">Azalan</option>
+                    </b-form-select>
                 </div>
             </div>
 
-            <!-- Accordion Content (Açılır/Kapanır) -->
-            <transition name="fade">
-                <div @click="EtkinlikSksView" v-show="item.isOpen" class="event-details">
-                    <div v-html="item.text"></div>
+            <div class="control-group">
+                <label for="filterInput">Filtrele</label>
+                <div class="inline-group">
+                    <b-form-input id="filterInput" v-model="filter" type="search" placeholder="Arama yapın" />
+                    <b-button :disabled="!filter" @click="filter = ''">Temizle</b-button>
                 </div>
-            </transition>
+            </div>
         </div>
+
+        <b-table striped hover responsive :per-page="perPage" :current-page="currentPage" :items="items"
+            :fields="fields" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :filter="filter"
+            :filter-included-fields="filterOn" @row-clicked="navigateToEventPage">
+            <template #cell(date)="data">
+                <span>{{ formatDate(data.item.date) }}</span>
+            </template>
+            <template #cell(location)="data">
+                <span>{{ data.item.location }}</span>
+            </template>
+            <template #cell(community)="data">
+                <span>{{ data.item.community }}</span>
+            </template>
+            <template #cell(actions)="data">
+                <b-button v-if="data.item.isSpecialEvent" @click="goToEventPage(data.item.link)" size="sm"
+                    variant="primary">Sayılı Etkinlik</b-button>
+            </template>
+        </b-table>
+
+        <b-pagination v-model="currentPage" :total-rows="totalRows" :per-page="perPage" align="center" size="sm" />
     </div>
 </template>
 
@@ -26,143 +58,113 @@
 export default {
     data() {
         return {
+            perPage: 5,
+            pageOptions: [3, 5, 10],
+            totalRows: 0,
+            currentPage: 1,
+            sortBy: "",
+            sortDesc: false,
+            filter: null,
+            filterOn: ["title", "location"],
+            fields: [
+                { key: "community", label: "Topluluk Adı" },
+                { key: "title", label: "Etkinlik Adı", sortable: true },
+                { key: "date", label: "Tarih", sortable: true },
+                { key: "location", label: "Yer" },
+                { key: "actions", label: "İşlemler" }
+            ],
             items: [
-                {
-                    id: "5d252001",
-                    title: "Devreler Topluluğu Etkinliği",
-                    date: "09.12.2024 08:22",
-                    text: `
-              <p><strong>2024-2025 Güz Dönemi - MYO 490 İŞLETMEDE MESLEKİ EĞİTİM - 1. Ara Sınav Not Girişleri Yayınlandı</strong></p>
-              <p>Normal Öğretim - B Şubesi 1. Ara Sınav not girişleri yayınlandı.</p>
-            `,
-                    isLimited: true,
-                    isOpen: false,
-                    link: "a40d630b0"
-                },
-                {
-                    id: "01b2e6c8",
-                    title: "Elektrik Topluluğu Etkinliği",
-                    date: "09.12.2024 08:22",
-                    text: `
-              <p><strong>2024-2025 Güz Dönemi - MYO 490 İŞLETMEDE MESLEKİ EĞİTİM - 1. Ara Sınav Not Girişleri Yayınlandı</strong></p>
-              <p>Normal Öğretim - B Şubesi 1. Ara Sınav not girişleri yayınlandı.</p>
-            `,
-                    isLimited: false,
-                    isOpen: false,
-                    link: "af7cfb95f"
-                }
+                { id: 1, title: "Devreler Topluluğu Etkinliği", date: "09.12.2024 08:22", location: "Konferans Salonu", community: "Devreler Topluluğu", isSpecialEvent: true, link: "a40d630b0" },
+                { id: 2, title: "Elektrik Topluluğu Etkinliği", date: "09.12.2024 08:22", location: "Toplantı Odası", community: "Elektrik Topluluğu", isSpecialEvent: false, link: "af7cfb95f" },
+                { id: 3, title: "Yazılım Topluluğu Etkinliği", date: "10.12.2024 10:00", location: "Seminer Salonu", community: "Yazılım Topluluğu", isSpecialEvent: true, link: "b29d6746c" }
             ]
         };
     },
+    mounted() {
+        this.totalRows = this.items.length;
+    },
     methods: {
-        EtkinlikSksView() {
+        navigateToEventPage(event) {
             this.$router.push(`/EtkinlikSks`);
         },
-        toggleAccordion(id) {
-            const item = this.items.find(item => item.id === id);
-            item.isOpen = !item.isOpen;
-        },
         goToEventPage(link) {
-            this.$router.push(`/SayılıEtkinlik`);
-        }
-    }
+            this.$router.push(`/SayılıEtkinlik/${link}`);
+        },
+        formatDate(date) {
+            const options = { year: "numeric", month: "long", day: "numeric" };
+            return new Date(date).toLocaleDateString("tr-TR", options);
+        },
+    },
+    computed: {
+        sortOptions() {
+            return this.fields.filter((f) => f.sortable).map((f) => ({
+                text: f.label,
+                value: f.key,
+            }));
+        },
+    },
 };
 </script>
 
 <style scoped>
-/* Genel Konteyner */
-.events-container {
-    max-width: 900px;
-    margin: 0 auto;
+.container {
     padding: 20px;
-    font-family: 'Arial', sans-serif;
+    background: #f9f9f9;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* Etkinlik Item Stili */
-.event-item {
-    background-color: #fff;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-    cursor: pointer;
+.header {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #495057;
+    text-align: center;
+    margin-bottom: 25px;
 }
 
-.event-item:hover {
-    transform: translateY(-5px);
-}
-
-/* Etkinlik Başlığı ve Tarihi */
-.event-header {
+.controls {
     display: flex;
     justify-content: space-between;
-    padding: 15px;
-    cursor: pointer;
-    background-color: #4caf50;
-    color: white;
-    border-radius: 10px 10px 0 0;
-    transition: background-color 0.3s ease;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
 }
 
-.event-header:hover {
-    background-color: #45a049;
-}
-
-.event-info {
+.control-group {
+    padding: 10px;
+    margin-bottom: 15px;
+    flex: 1 1 calc(33.333% - 10px);
     display: flex;
     flex-direction: column;
 }
 
-.event-title {
-    font-size: 18px;
-    font-weight: bold;
+label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #343a40;
 }
 
-.event-date {
-    font-size: 14px;
-    color: #f1f1f1;
-}
-
-/* Sayılı Etkinlik Butonu */
-.limited-event-button {
+.inline-group {
     display: flex;
-    align-items: center;
+    gap: 10px;
 }
 
-.small-button {
-    background-color: #ff5722;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 20px;
-    font-size: 14px;
+.b-table {
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.small-button:hover {
-    background-color: #e64a19;
+.b-pagination {
+    margin-top: 15px;
 }
 
-/* Etkinlik Detayları */
-.event-details {
-    padding: 20px;
-    background-color: #fafafa;
-    font-size: 14px;
-    color: #333;
-    border-radius: 0 0 10px 10px;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+.b-table tr:hover {
+    background-color: #f1f3f5;
 }
 
-/* Fade Animasyonu */
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 0.3s ease;
-}
-
-.fade-enter,
-.fade-leave-to {
-    opacity: 0;
+.b-button {
+    margin-top: 5px;
 }
 </style>
