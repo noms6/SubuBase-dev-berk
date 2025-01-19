@@ -1,4 +1,4 @@
-export default [
+export default [ 
   {
     title: 'Anasayfa-Başkan',
     route: 'Anasayfa',
@@ -6,7 +6,7 @@ export default [
     roles: []
   },
   {
-    title: 'Talep Et',
+    title: 'Etkinlik Talep Et',
     route: 'TalepEt',
     roles: []
   },
@@ -30,7 +30,7 @@ export default [
     title: 'Gerekli Belgeler',
     route: 'GerekliBelgeler',
     roles: []
-  },
+  }, /*
   {
     title: 'Anasayfa-Sks',
     route: 'AnasayfaSks',
@@ -52,6 +52,7 @@ export default [
     route: 'Etkinlikler',
     roles: []
   },
+  /*
   {
     title: 'Anasayfa-Öğrenci',
     route: 'AnasayfaOgr',
@@ -63,15 +64,11 @@ export default [
     route: 'topluluk-olustur',
     roles: []
   },
- /* {
-    title: 'Bildirimler',
-    route: 'NotificationFull',
-    roles: []
-  }, */
+ 
   {
     title: 'Topluluklarım',
     route: 'Toplulugum2',
     roles: [] 
   },
-  
+  */
 ];

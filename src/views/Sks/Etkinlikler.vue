@@ -88,7 +88,7 @@ export default {
             this.$router.push(`/EtkinlikSks`);
         },
         goToEventPage(link) {
-            this.$router.push(`/SayılıEtkinlik/${link}`);
+            this.$router.push(`/SayılıEtkinlik`);
         },
         formatDate(date) {
             const options = { year: "numeric", month: "long", day: "numeric" };

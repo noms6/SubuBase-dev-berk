@@ -1,15 +1,19 @@
 <template>
     <div class="container mt-5">
+        <!-- Etkinlik ve Topluluk Bilgisi -->
+        <div class="mb-4 text-center">
+            <h2>{{ eventName }}</h2>
+            <h4>{{ clubName }}</h4>
+        </div>
+
         <!-- Gelen Talepler -->
         <div class="mb-4">
-            <h2>Gelen Talepler</h2>
+            <h3>Gelen Talepler</h3>
             <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>Ad Soyad</th>
                         <th>Öğrenci Numarası</th>
-                        <th>Topluluk Adı</th>
-                        <th>Etkinlik Adı</th>
                         <th>İşlemler</th>
                     </tr>
                 </thead>
@@ -17,8 +21,6 @@
                     <tr v-for="(req, index) in requests" :key="index">
                         <td>{{ req.name }}</td>
                         <td>{{ req.number }}</td>
-                        <td>{{ req.club }}</td>
-                        <td>{{ req.event }}</td>
                         <td>
                             <button class="btn btn-success" @click="approveRequest(index)">Onayla</button>
                             <button class="btn btn-danger" @click="rejectRequest(index)">Reddet</button>
@@ -30,14 +32,12 @@
 
         <!-- Onaylanan Talepler -->
         <div class="mb-4">
-            <h2>Onaylanan Talepler</h2>
+            <h3>Onaylanan Talepler</h3>
             <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>Ad Soyad</th>
                         <th>Öğrenci Numarası</th>
-                        <th>Topluluk Adı</th>
-                        <th>Etkinlik Adı <span>{{ participantCount }}</span></th>
                         <th>İşlemler</th>
                     </tr>
                 </thead>
@@ -45,8 +45,6 @@
                     <tr v-for="(req, index) in approvedRequests" :key="index">
                         <td>{{ req.name }}</td>
                         <td>{{ req.number }}</td>
-                        <td>{{ req.club }}</td>
-                        <td>{{ req.event }}</td>
                         <td>
                             <button class="btn btn-warning" @click="removeFromApproved(index)">Sil</button>
                         </td>
@@ -62,12 +60,14 @@
 export default {
     data() {
         return {
+            eventName: "Bilim Merkezi Gezisi", // Etkinlik adı
+            clubName: "Teknoloji Kulübü", // Topluluk adı
             requests: [
-                { name: "Emre Can", number: "987654", club: "Teknoloji Kulübü", event: "Bilim Merkezi Gezisi" },
-                { name: "Ayşe Yılmaz", number: "123456", club: "Sanat Kulübü", event: "Resim Çalıştayı" },
-                { name: "Fatma Aksoy", number: "654321", club: "Edebiyat Kulübü", event: "Kitap Okuma Etkinliği" },
-                { name: "Ahmet Demir", number: "456789", club: "Teknoloji Kulübü", event: "Bilim Merkezi Gezisi" },
-                { name: "Ali Veli", number: "111111", club: "Teknoloji Kulübü", event: "Bilim Merkezi Gezisi" }
+                { name: "Emre Can", number: "987654" },
+                { name: "Ayşe Yılmaz", number: "123456" },
+                { name: "Fatma Aksoy", number: "654321" },
+                { name: "Ahmet Demir", number: "456789" },
+                { name: "Ali Veli", number: "111111" }
             ],
             approvedRequests: [],
             maxParticipants: 5,
@@ -89,7 +89,6 @@ export default {
             this.requests.splice(index, 1);
         },
         removeFromApproved(index) {
-            // Onaylanan talepten silme işlemi
             this.approvedRequests.splice(index, 1);
         }
     },

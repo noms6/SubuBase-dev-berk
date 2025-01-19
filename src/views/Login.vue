@@ -1,261 +1,316 @@
 <template>
-  <div class="auth-wrapper auth-v2 d-flex align-items-center justify-content-center">
-    <b-row class="auth-inner m-0">
-      <!-- Login -->
-      <b-col lg="4" class="d-flex align-items-center auth-bg px-2 p-lg-5 mx-auto">
-        <b-col sm="8" md="6" lg="10" class="px-xl-2 mx-auto text-center">
-          <!-- Logo -->
-          <div class="logo-container mb-4">
-            <img src="https://www.subu.edu.tr/sites/logo/LOGO2024.png" alt="SUBU Logo" class="img-fluid logo-large" />
-          </div>
+  <div class="auth-wrapper">
+    <div class="animated-bg"></div>
+    <b-row class="m-0 justify-content-center align-items-center min-vh-100 w-100">
+      <b-col lg="5" md="8" sm="11" class="auth-form-container px-4 py-5">
+        <div class="text-center mb-4">
+          <img src="https://www.subu.edu.tr/sites/logo/LOGO2024.png" alt="SUBU Logo" class="logo-img mb-4" />
+          <h2 class="title-gradient">
+            <br />
+            Topluluk Giriş Ekranı
+          </h2>
+        </div>
 
-          <b-card-title title-tag="h2" class="font-weight-bold mb-3 text-white">
-            Topluluklara Hoşgeldin
-          </b-card-title>
-
-          <!-- Form -->
-          <validation-observer ref="loginValidation">
-            <b-form class="auth-login-form mt-2" @submit.prevent>
-              <!-- Email -->
-              <b-form-group label="Numara" label-for="login-email" class="text-left text-white">
-                <validation-provider #default="{ errors }" name="Email">
-                  <b-form-input id="login-email" v-model="userEmail" :state="errors.length > 0 ? false : null"
-                    name="login-email" placeholder="12345678098" class="custom-input" />
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
+        <validation-observer ref="loginForm" v-slot="{ handleSubmit }">
+          <b-form @submit.prevent="handleSubmit(onSubmit)" class="login-form">
+            <validation-provider name="Öğrenci Numarası" rules="required|numeric|min:11" v-slot="{ errors }">
+              <b-form-group label="Öğrenci Numarası" class="form-group-custom">
+                <b-input-group class="input-group-custom">
+                  <b-input-group-prepend>
+                    <b-input-group-text>
+                      <i class="fas fa-user"></i>
+                    </b-input-group-text>
+                  </b-input-group-prepend>
+                  <b-form-input v-model="form.studentNumber" placeholder="12345678901" :state="errors.length === 0" trim
+                    class="custom-input" />
+                </b-input-group>
+                <small class="text-danger">{{ errors[0] }}</small>
               </b-form-group>
+            </validation-provider>
 
-              <!-- Forgot Password -->
-              <b-form-group>
-                <div class="d-flex justify-content-between">
-                  <label for="login-password" class="text-white">Şifre</label>
-                  <b-link :to="{ name: 'auth-forgot-password-v2' }" class="text-white">
-                    <small>Parolamı Unuttum</small>
-                  </b-link>
+            <validation-provider name="Şifre" rules="required|min:6" v-slot="{ errors }">
+              <b-form-group class="form-group-custom">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <label>Şifre</label>
+                  <b-link class="forgot-password">Parolamı Unuttum</b-link>
                 </div>
-                <validation-provider #default="{ errors }" name="Password">
-                  <b-input-group class="input-group-merge">
-                    <b-form-input id="login-password" v-model="password" :state="errors.length > 0 ? false : null"
-                      class="custom-input" :type="passwordFieldType" placeholder="••••••••" />
-                    <b-input-group-append is-text>
-                      <feather-icon class="cursor-pointer" :icon="passwordToggleIcon"
-                        @click="togglePasswordVisibility" />
-                    </b-input-group-append>
-                  </b-input-group>
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
+                <b-input-group class="input-group-custom">
+                  <b-input-group-prepend>
+                    <b-input-group-text>
+                      <i class="fas fa-lock"></i>
+                    </b-input-group-text>
+                  </b-input-group-prepend>
+                  <b-form-input v-model="form.password" :type="showPassword ? 'text' : 'password'"
+                    placeholder="••••••••" :state="errors.length === 0" class="custom-input" />
+                  <b-input-group-append>
+                    <b-button @click="showPassword = !showPassword" class="password-toggle">
+                      <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                    </b-button>
+                  </b-input-group-append>
+                </b-input-group>
+                <small class="text-danger">{{ errors[0] }}</small>
               </b-form-group>
+            </validation-provider>
 
-              <!-- Remember Me -->
-              <b-form-group>
-                <b-form-checkbox id="remember-me" v-model="status" name="checkbox-1" class="text-white">
-                  Beni hatırla
-                </b-form-checkbox>
-              </b-form-group>
+            <b-form-group class="remember-me-group">
+              <b-form-checkbox v-model="form.rememberMe" class="remember-me">
+                Beni Hatırla
+              </b-form-checkbox>
+            </b-form-group>
 
-              <!-- Submit Button -->
-              <b-button type="submit" variant="success" block class="custom-button" @click="validationForm">
-                Giriş yap
-              </b-button>
-            </b-form>
-          </validation-observer>
-        </b-col>
+            <b-button type="submit" variant="primary" class="login-button w-100" :disabled="loading">
+              <b-spinner small v-if="loading"></b-spinner>
+              <span>{{ loading ? 'Giriş yapılıyor...' : 'Giriş Yap' }}</span>
+            </b-button>
+          </b-form>
+        </validation-observer>
       </b-col>
     </b-row>
   </div>
 </template>
 
 <script>
-/* eslint-disable global-require */
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import {
-  BRow, BCol, BLink, BFormGroup, BFormInput, BInputGroupAppend, BInputGroup, BFormCheckbox, BCardTitle, BForm, BButton,
-} from 'bootstrap-vue'
-import { required, email } from '@validations'
-import { togglePasswordVisibility } from '@core/mixins/ui/forms'
-import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
-import Login from './Login.json'
-
 export default {
-  components: {
-    BRow,
-    BCol,
-    BLink,
-    BFormGroup,
-    BFormInput,
-    BInputGroupAppend,
-    BInputGroup,
-    BFormCheckbox,
-    BCardTitle,
-    BForm,
-    BButton,
-    ValidationProvider,
-    ValidationObserver,
-  },
-  mixins: [togglePasswordVisibility],
+  name: 'LoginForm',
   data() {
     return {
-      status: '',
-      password: '',
-      userEmail: '', // Kullanıcı adı (Numara alanına bağlanıyor)
-      required,
-      email,
-      Roles: Login, // Geçerli kullanıcı isimleri
+      form: {
+        studentNumber: '',
+        password: '',
+        rememberMe: false
+      },
+      showPassword: false,
+      loading: false
     }
   },
-  computed: {
-    passwordToggleIcon() {
-      return this.passwordFieldType === 'password' ? 'EyeIcon' : 'EyeOffIcon'
-    },
-  },
   methods: {
-    checkName() {
-      return this.Roles.users.map(user => user.name).includes(this.userEmail)
-    },
-    validationForm() {
-      this.$refs.loginValidation.validate().then(success => {
-        if (success) {
-          const userNames = this.Roles.users.map(user => user.name);
-          console.log(userNames); // Konsola yazdırmak için
-          // Kullanıcı adı kontrolü
-          if (userNames.includes(this.userEmail)) {
-            this.$router.push('/')
-            this.$toast({
-              component: ToastificationContent,
-              props: {
-                title: 'Giriş Başarılı',
-                icon: 'CheckIcon',
-                variant: 'success',
-              },
-            })
-          } else {
-            this.$toast({
-              component: ToastificationContent,
-              props: {
-                title: 'Hatalı Kullanıcı Adı',
-                icon: 'AlertTriangleIcon',
-                variant: 'danger',
-              },
-            })
-          }
-        }
-      })
-    },
-  },
+    async onSubmit() {
+      this.loading = true
+      try {
+        await new Promise(resolve => setTimeout(resolve, 1500))
+        this.$bvToast.toast('Başarıyla giriş yapıldı!', {
+          title: 'Başarılı',
+          variant: 'success',
+          solid: true
+        })
+      } catch (error) {
+        this.$bvToast.toast('Giriş yapılırken bir hata oluştu!', {
+          title: 'Hata',
+          variant: 'danger',
+          solid: true
+        })
+      } finally {
+        this.loading = false
+      }
+    }
+  }
 }
 </script>
 
-
 <style lang="scss">
-@import '@core/scss/vue/pages/page-auth.scss';
-
 .auth-wrapper {
-  background: url('https://media.university.com.tr/wp-content/uploads/2022/03/130_Sakarya-Uygulamali-Bilimler-University_Campus.jpg') no-repeat center center;
-  background-size: cover;
   min-height: 100vh;
+  width: 100vw;
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url('https://media.university.com.tr/wp-content/uploads/2022/03/130_Sakarya-Uygulamali-Bilimler-University_Campus.jpg');
+  background-size: cover;
+  background-position: center;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
 
+.animated-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg,
+      rgba(33, 147, 176, 0.3),
+      rgba(109, 213, 237, 0.3),
+      rgba(33, 147, 176, 0.3));
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.auth-form-container {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  animation: slideIn 0.5s ease-out;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 2rem;
+  /* Card padding azaltıldı */
+  width: 100%;
+  max-width: 500px;
+  /* Maksimum genişlik ayarlandı */
+}
+
+.login-form {
+  padding: 0.5rem;
+}
+
+.logo-img {
+  max-width: 180px;
+  height: auto;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+.title-gradient {
+  font-weight: bold;
+  font-size: 1.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  white-space: normal;
+  /* Kelimeler alt alta yazılacak */
+  line-height: 1.2;
 
 }
 
-.auth-bg {
-  border-radius: 15px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  background-color: rgba(240, 248, 255, 0.75);
-  padding: 20px 30px;
-  /* Daha dar padding */
-  max-width: 450px;
-  margin-top: 50px;
-  margin-bottom: 50px;
+.form-group-custom {
+  margin-bottom: 1.5rem;
+
+  label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+  }
 }
 
+.input-group-custom {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
 
+  &:focus-within {
+    box-shadow: 0 4px 12px rgba(33, 147, 176, 0.15);
+  }
+}
+
+.input-group-text {
+  background: #f8f9fa;
+  border: none;
+  color: #2193b0;
+  padding: 0.75rem 1rem;
+}
 
 .custom-input {
-  font-size: 1.2rem;
-  /* Yazı boyutunu artır */
-  height: 50px;
-  /* Yükseklik artırıldı */
-  border: 1px solid #6dd5fa;
-  box-shadow: 0 0 5px rgba(0, 191, 255, 0.3);
-  transition: all 0.3s ease;
-}
-
-.custom-input:focus {
-  border-color: #2980b9;
-  box-shadow: 0 0 8px rgba(0, 191, 255, 0.7);
-}
-
-.custom-button {
-  font-size: 1.2rem;
-  /* Buton yazı boyutu artırıldı */
-  height: 50px;
-  /* Buton yüksekliği artırıldı */
-  background-color: #28a745;
   border: none;
-  box-shadow: 0 4px 6px rgba(40, 167, 69, 0.3);
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  background: #f8f9fa;
+
+  &:focus {
+    background: #ffffff;
+    box-shadow: none;
+  }
+}
+
+.password-toggle {
+  background: #f8f9fa;
+  border: none;
+  color: #2193b0;
+  padding: 0 1rem;
+
+  &:hover {
+    background: #e9ecef;
+    color: #1a7289;
+  }
+}
+
+.forgot-password {
+  font-size: 0.875rem;
+  color: #2193b0;
+  text-decoration: none;
   transition: all 0.3s ease;
+
+  &:hover {
+    color: #6dd5ed;
+    text-decoration: none;
+  }
 }
 
-.custom-button:hover {
-  background-color: #218838;
-  box-shadow: 0 6px 10px rgba(40, 167, 69, 0.5);
+.remember-me-group {
+  margin: 1.5rem 0;
 }
 
-.b-card-title {
-  font-size: 1.8rem;
-  /* Başlık daha büyük */
-  font-weight: bold;
-  margin-bottom: 1.5rem;
-  color: white;
+.remember-me {
+  font-size: 0.875rem;
+  color: #2c3e50;
+
+  .custom-control-label {
+    &::before {
+      border-radius: 4px;
+      border-color: #2193b0;
+    }
+  }
 }
 
-.logo-container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px 0;
-  /* Daha az padding */
+.login-button {
+  padding: 0.75rem;
+  background: linear-gradient(45deg, #2193b0, #6dd5ed);
+  border: none;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(33, 147, 176, 0.3);
+    background: linear-gradient(45deg, #1c7f99, #5bc1d9);
+  }
+
+  &:disabled {
+    background: linear-gradient(45deg, #a8a8a8, #cccccc);
+    cursor: not-allowed;
+  }
 }
 
+@keyframes slideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
 
-.logo-large {
-  max-width: 250px;
-  /* Logo boyutu */
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
-.auth-login-form {
-  margin-top: 10px;
-  /* Formu logoya yaklaştır */
-}
+// Responsive adjustments
+@media (max-width: 768px) {
+  .auth-form-container {
+    margin: 1rem;
+    padding: 1.5rem !important;
+  }
 
-.b-form-group {
-  margin-bottom: 15px;
-  /* Daha az boşluk */
-}
+  .title-gradient {
+    font-size: 1.25rem;
+  }
 
-#remember-me {
-  display: inline-block;
-  /* Checkbox ve yazıyı hizala */
-  margin-right: 8px;
-  /* Checkbox ile yazı arasında biraz boşluk */
-}
-
-.b-form-checkbox {
-  display: flex;
-  align-items: center;
-  /* Yazıyı dikeyde checkbox ile hizala */
-}
-
-.custom-button {
-  margin-top: 15px;
-  /* Butonun yukarıdaki ögelerle mesafesini biraz azalt */
-}
-
-.text-muted {
-  color: #b8b8b8
+  .login-button {
+    padding: 0.6rem;
+  }
 }
 </style>

@@ -252,7 +252,7 @@ const router = new VueRouter({
       name: 'SayılıEtkinlik',
       component: () => import('@/views/Sks/SayılıView.vue'),
       meta: {
-        pageTitle: 'Sayılı Etkinlik',
+        pageTitle: 'Etkinlikler',
         breadcrumb: [
           {
             text: 'Sayılı Etkinlik',
